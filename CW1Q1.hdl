@@ -1,0 +1,30 @@
+CHIP CW1Q1 {
+	IN s1, s2, x, y;
+	OUT f;
+
+	PARTS:
+	// not everythign
+	Not(x=x, out=notx);
+	Not(x=y, out=noty);
+	Not(x=s1, out=nots1);
+	Not(x=s2, out=nots2);
+
+	// the first term:s1 and y
+	And(x=s1, y=y, out=s1Andy);
+
+	// the second term
+	And(x=nots2, y=x, out=nots2Andx);
+	And(x=s2, y=notx, out=s2AndNotx);
+	Or(x=nots2Andx, y=s2AndNotx, out=nots2AndxOrs2AndNotx);
+	Or(x=s1, y=y, out=s1Ory);
+	And(x=nots2AndxOrs2AndNotx, y=s1Ory, out=secondTerm);
+
+	// the third term: not s1 and s2 and not x and y
+	And(x=nots1, y=s2, out=nots1Ands2);
+	And(x=x, y=noty, out=xAndNoty);
+	And(x=nots1Ands2, y=xAndNoty, out=thirdTerm);
+
+	// combine
+	Or(x=s1Andy, y=secondTerm, out=firstTwo);
+	Or(x=firstTwo, y=thirdTerm, out=f);
+}

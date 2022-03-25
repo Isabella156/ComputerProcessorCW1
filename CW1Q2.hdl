@@ -1,0 +1,12 @@
+CHIP CW1Q2{
+	IN a, b, c;
+	OUT f;
+
+	PARTS:
+	// a and not b and not c
+	Not(x=b, out=notb);
+	Not(x=c, out=notc);
+	And(x=notb, y=notc, out=notbAndNotc);
+	And(x=notbAndNotc, y=a, out=aAndNotbAndNotc);
+	Or(x=aAndNotbAndNotc, y=b, out=f);
+}
